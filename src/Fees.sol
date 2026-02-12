@@ -7,6 +7,11 @@ import "./utils/Structs.sol";
 import {IERC20} from "./interfaces/IERC20.sol";
 
 import {ISwapRouter} from "./interfaces/ISwapRouter.sol";
+/*(File Summary
+Purpose: _profits টোকেনকে WETH-এ swap করা এবং staking ঠিকানায় পাঠানো।
+Main function: sellProfits(address _profits)
+Key external dependency: Uniswap V3 Router (swapRouter)*/
+
 
 contract Fees {
     address public immutable WETH;
@@ -23,16 +28,17 @@ contract Fees {
 
     /// @notice swap loan tokens for collateral tokens from liquidations
     /// @param _profits the token to swap for WETH
-    function sellProfits(address _profits) public {
+    function sellProfits(address _profits) public {//@a function sellProfits(address _profits) external onlyOwner
+
         require(_profits != WETH, "not allowed");
         uint256 amount = IERC20(_profits).balanceOf(address(this));
-
+  
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter
             .ExactInputSingleParams({
                 tokenIn: _profits,
                 tokenOut: WETH,
                 fee: 3000,
-                recipient: address(this),
+                recipient: address(this),//Beedle maybe hold profits in Fees contract
                 deadline: block.timestamp,
                 amountIn: amount,
                 amountOutMinimum: 0,
@@ -41,5 +47,5 @@ contract Fees {
 
         amount = swapRouter.exactInputSingle(params);
         IERC20(WETH).transfer(staking, IERC20(WETH).balanceOf(address(this)));
-    }
+    }//                                     ^uint
 }
