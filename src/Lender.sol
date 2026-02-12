@@ -15,11 +15,11 @@ contract Lender is Ownable {
         bytes32 indexed poolId,
         uint256 newInterestRate
     );
-    event PoolMaxLoanRatioUpdated(
+    event PoolMaxLoanRatioUpdated(//ধরো lender A pool-এর maxLoanRatio 80% → 85% update করল।
         bytes32 indexed poolId,
         uint256 newMaxLoanRatio
     );
-    event Borrowed(
+    event Borrowed(//Borrowed(borrower=Alice, lender=BDL_pool_lender, loanId=1, debt=1000, collateral=1500, interestRate=5%, startTimestamp=1680000000)
         address indexed borrower,
         address indexed lender,
         uint256 indexed loanId,
@@ -37,7 +37,10 @@ contract Lender is Ownable {
         uint256 interestRate,
         uint256 startTimestamp
     );
-    event AuctionStart(
+    event AuctionStart(//Old Loan: Alice owes $1000 to Bob
+//New Pool: Charlie can lend $950 at better rate
+//Refinance -> Alice’s debt now owed to Charlie, terms updated
+
         address indexed borrower,
         address indexed lender,
         uint256 indexed loanId,
@@ -46,28 +49,28 @@ contract Lender is Ownable {
         uint256 auctionStartTime,
         uint256 auctionLength
     );
-    event LoanBought(uint256 loanId);
+    event LoanBought(uint256 loanId);//যখন কোনো লেন্ডার (যেমন Charlie) অকশন থেকে ঋণটি কিনে, তখন এই ইভেন্টটি এমিট হয়।যেখানে loanId Alice-এর ঋণের আইডি।
     event LoanSiezed(
         address indexed borrower,
         address indexed lender,
         uint256 indexed loanId,
         uint256 collateral
     );
-    event Refinanced(uint256 loanId);
+    event Refinanced(uint256 loanId);//এই loan টা নতুন শর্তে আপডেট হয়েছে
 
     /// @notice the maximum interest rate is 1000%
     uint256 public constant MAX_INTEREST_RATE = 100000;
     /// @notice the maximum auction length is 3 days
     uint256 public constant MAX_AUCTION_LENGTH = 3 days;
     /// @notice the fee taken by the protocol in BIPs
-    uint256 public lenderFee = 1000;
+    uint256 public lenderFee = 1000;//1000 BIP = 10%
     /// @notice the fee taken by the protocol in BIPs
-    uint256 public borrowerFee = 50;
+    uint256 public borrowerFee = 50;//0.5%
     /// @notice the address of the fee receiver
-    address public feeReceiver;
+    address public feeReceiver;//10$+5$=15$
 
     /// @notice mapping of poolId to Pool (poolId is keccak256(lender, loanToken, collateralToken))
-    mapping(bytes32 => Pool) public pools;
+    mapping(bytes32 => Pool) public pools;//একজন lender + একটি loan token + একটি collateral token” = এক pool
     Loan[] public loans;
 
     constructor() Ownable(msg.sender) {
