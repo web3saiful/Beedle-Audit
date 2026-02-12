@@ -11,7 +11,7 @@ contract Beedle is Ownable, ERC20, ERC20Permit, ERC20Votes {
     constructor() ERC20("Beedle", "BDL") ERC20Permit("Beedle") Ownable(msg.sender) {
         _mint(msg.sender, 1_000_000_000 * 1e18);
     }
-
+//?Does voting power always match balances?
     function _afterTokenTransfer(address from, address to, uint256 amount)
         internal
         override(ERC20, ERC20Votes)
@@ -32,8 +32,8 @@ contract Beedle is Ownable, ERC20, ERC20Permit, ERC20Votes {
     {
         super._burn(account, amount);
     }
-    
-    function mint(address to, uint256 amount) external onlyOwner {
+    //?What happens if owner misbehaves?“Owner has full minting control; token supply can inflate. Check if spec allows this.”
+    function mint(address to, uint256 amount) external onlyOwner {//
         _mint(to, amount);
     }
 
