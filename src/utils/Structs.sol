@@ -45,19 +45,19 @@ struct Loan {
     /// @notice the amount of collateral locked in the loan
     uint256 collateral;
     /// @notice the interest rate of the loan per second (in debt tokens)
-    uint256 interestRate;
-    /// @notice the timestamp of the loan start
+    uint256 interestRate;//১ বছরে ~ 31,536,000 seconds 1000 × 10% = 100 USDC per year
+     /// @notice the timestamp of the loan start
     uint256 startTimestamp;
     /// @notice the timestamp of a refinance auction start
     uint256 auctionStartTimestamp;
     /// @notice the refinance auction length
-    uint256 auctionLength;
+    uint256 auctionLength;//3 days = 259200 seconds
 }
 
 struct Refinance {
     /// @notice the loan ID to refinance
     uint256 loanId;
-    /// @notice the pool ID to refinance to
+    /// @notice the pool ID to refinance to //কোন নতুন pool এ যাবে
     bytes32 poolId;
     /// @notice the new desired debt amount
     uint256 debt;
