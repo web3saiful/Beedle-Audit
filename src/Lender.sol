@@ -127,6 +127,10 @@ contract Lender is Ownable {
     /*                        BASIC LOANS                         */
     /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
+
+
+
+
     /// @notice set the info for a pool
     /// updates pool info for msg.sender
     /// @param p the new pool info
